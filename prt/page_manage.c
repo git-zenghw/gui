@@ -2,7 +2,7 @@
  * @Author: zenghw
  * @Date: 2026-05-27 23:35:18
  * @Description: 
- * @LastEditTime: 2026-05-27 23:57:54
+ * @LastEditTime: 2026-05-28 22:03:38
  */
 
 #include "common.h"
@@ -45,6 +45,7 @@ void page_navigate_to(int page_id)
     // 获取当前页面，并放置后台
     page_t *current = page_stack_top(&gs_pm.stack);
     if (current && current->pause_page) {
+        log_err("pause page: %s", current->name);
         current->pause_page(current);
     }
 
@@ -75,6 +76,31 @@ int page_go_back(void)
     page_t *pre = page_stack_top(&gs_pm.stack);
     if (pre && pre->resume_page) {
         pre->resume_page(pre);  // 还原上一页面
+    }
+
+    return 0;
+}
+
+/* 任意界面跳回主界面 */
+int page_back_to_main_page(void)
+{
+    while (gs_pm.stack.top > 1) {
+        page_t *current = page_stack_pop(&gs_pm.stack);
+        if (NULL == current) {
+            log_warn("already on");
+            return -1;
+        }
+        if (current->pause_page) {
+            current->pause_page(current);
+        }
+        if (current->destroy_page) {
+            current->destroy_page(current);
+        }
+    }
+
+    page_t *main_page = page_stack_top(&gs_pm.stack);
+    if (main_page && main_page->resume_page) {
+        main_page->resume_page(main_page);  // 回到主页面 
     }
 
     return 0;

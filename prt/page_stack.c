@@ -2,7 +2,7 @@
  * @Author: zenghw
  * @Date: 2026-05-27 22:49:58
  * @Description: 
- * @LastEditTime: 2026-05-27 23:29:44
+ * @LastEditTime: 2026-05-28 22:05:20
  */
 
 #include <unistd.h>
@@ -18,9 +18,8 @@ page_t *page_stack_pop(page_stack_t *s)
         return NULL;
     }
 
-    /* 先出再减 */
-    page = s->stack[s->top];
     s->top --;
+    page = s->stack[s->top];
 
     return page;
 }
@@ -33,9 +32,8 @@ int32_t page_stack_push(page_stack_t *s, page_t *page)
         return  -1;
     }
 
-    /* 先加再入 */
-    s->top ++;
     s->stack[s->top] = page;
+    s->top ++;
 
     return 0;
 }
@@ -48,5 +46,5 @@ page_t *page_stack_top(page_stack_t *s)
         return NULL;
     }
 
-    return s->stack[s->top];
+    return s->stack[s->top-1];
 }
