@@ -2,7 +2,7 @@
  * @Author: zenghw
  * @Date: 2026-05-27 22:50:04
  * @Description: 
- * @LastEditTime: 2026-05-27 23:29:21
+ * @LastEditTime: 2026-05-27 23:58:26
  */
 
 #ifndef PAGE_PRT_H
@@ -35,6 +35,9 @@ page_t *page_stack_pop(page_stack_t *s);
 int32_t page_stack_push(page_stack_t *s, page_t *page);
 
 
+void page_register(page_t *page);
+void page_navigate_to(int page_id);
+int page_go_back(void);
 
 #ifdef __cplusplus
 }
